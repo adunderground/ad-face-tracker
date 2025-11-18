@@ -1,4 +1,23 @@
-### Basic Usage
+# ad-face-tracker
+
+Simple React + Vite demo that shows face images and basic gaze/face tracking.
+
+Summary:
+
+- Uses a small React component and a hook to swap/track face images (see `hooks/useGazeTracking.js`).
+- Faces are stored under `public/faces/`.
+
+Quick start:
+
+1. Install dependencies: `npm install`
+2. Run dev server: `npm run dev`
+
+Credits:
+
+Based on and inspired by https://github.com/kylan02/face_looker.
+
+
+### Basic Usage FaceTracker component
 
 ```jsx
 import FaceTracker from './components/FaceTracker';
@@ -7,15 +26,12 @@ function App() {
   return (
     <div className="App">
       <h1>My Portfolio</h1>
-      
+
       {/* Basic usage */}
       <FaceTracker />
-      
+
       {/* With custom styling */}
-      <FaceTracker 
-        className="my-custom-class"
-        basePath="/faces/"
-      />
+      <FaceTracker className="my-custom-class" basePath="/faces/" />
     </div>
   );
 }
@@ -28,14 +44,16 @@ import FaceTracker from './components/FaceTracker';
 
 function Header() {
   return (
-    <header style={{ 
-      height: '400px', 
-      display: 'flex', 
-      alignItems: 'center',
-      justifyContent: 'center'
-    }}>
+    <header
+      style={{
+        height: '400px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       <div style={{ width: '300px', height: '300px' }}>
-        <FaceTracker 
+        <FaceTracker
           basePath="/faces/"
           showDebug={process.env.NODE_ENV === 'development'}
         />
@@ -56,24 +74,24 @@ import { useGazeTracking } from './hooks/useGazeTracking';
 function CustomFaceComponent() {
   const containerRef = useRef(null);
   const { currentImage, isLoading, error } = useGazeTracking(
-    containerRef, 
+    containerRef,
     '/faces/'
   );
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       style={{ width: '400px', height: '400px', position: 'relative' }}
     >
       {currentImage && (
-        <img 
-          src={currentImage} 
+        <img
+          src={currentImage}
           alt="Following face"
-          style={{ 
-            width: '100%', 
+          style={{
+            width: '100%',
             height: '100%',
             objectFit: 'cover',
-            borderRadius: '50%'  // Make it circular!
+            borderRadius: '50%', // Make it circular!
           }}
         />
       )}
@@ -90,10 +108,10 @@ If you change the generation parameters, update these constants in `useGazeTrack
 
 ```javascript
 // Must match your generation parameters!
-const P_MIN = -15;  // Same as --min
-const P_MAX = 15;   // Same as --max
-const STEP = 3;     // Same as --step
-const SIZE = 256;   // Same as --size
+const P_MIN = -15; // Same as --min
+const P_MAX = 15; // Same as --max
+const STEP = 3; // Same as --step
+const SIZE = 256; // Same as --size
 ```
 
 ## 🎛️ Customization
@@ -115,7 +133,7 @@ const SIZE = 256;   // Same as --size
   overflow: hidden;
   background: #f0f0f0;
   border-radius: 50%; /* Circular face */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .face-image {
