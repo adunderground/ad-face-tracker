@@ -1,9 +1,9 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import useGazeTracking from './useGazeTracking';
-import './FaceTracker.css'; // Optional styling
+import useImageTracking from './useImageTracking';
+import './GazeTracker.css'; // Optional styling
 
 /**
- * FaceTracker Component
+ * GazeTracker Component
  * Maps mouse position to 2D grid of logical poses, which are then mapped onto
  * the physical frames of the backing video.
  *
@@ -15,7 +15,7 @@ import './FaceTracker.css'; // Optional styling
 // const VIDEO_PATH = '/video/moredots.mp4';
 const VIDEO_PATH = '/video/graph.mp4';
 
-export default function FaceTracker({
+export default function GazeTracker({
   FPS = 30,
   className = '',
   basePath = '/faces/',
@@ -25,7 +25,7 @@ export default function FaceTracker({
 }) {
   const containerRef = useRef(null);
   const videoRef = useRef(null);
-  const { currentImage, isLoading, error } = useGazeTracking(
+  const { currentImage, isLoading, error } = useImageTracking(
     containerRef,
     basePath,
   );
@@ -271,3 +271,4 @@ export default function FaceTracker({
     </div>
   );
 }
+

@@ -33,7 +33,7 @@ function gridToFilename(px, py) {
  * @param {string} basePath - Base path to face images (default: '/faces/')
  * @returns {Object} { currentImage, isLoading, error }
  */
-export function useGazeTracking(containerRef, basePath = '/faces/') {
+export function useImageTracking(containerRef, basePath = '/faces/') {
   const [currentImage, setCurrentImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -98,5 +98,5 @@ export function useGazeTracking(containerRef, basePath = '/faces/') {
   return { currentImage, isLoading, error };
 }
 
-export default useGazeTracking;
+export default useImageTracking;
 
