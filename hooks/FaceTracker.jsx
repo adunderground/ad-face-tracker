@@ -4,11 +4,17 @@ import './FaceTracker.css'; // Optional styling
 
 /**
  * FaceTracker Component
- * Prefers using a video at `/video/face.mp4`, falls back to images in `basePath`.
- * Maps mouse position to 2D grid of video frames.
+ * Prefers using a video at `/video/output-big.mp4`, falls back to images in `basePath`.
+ * Maps mouse position to 2D grid of logical poses, which are then mapped onto
+ * the physical frames of the backing video.
+ *
+ * NOTE: The mapping below is currently calibrated for `output-big.mp4`
+ * (378x378, ~12.10s at 30fps). If you change the source video, you may also
+ * want to update the PHYSICAL_FPS constant to match the new asset.
  */
 
-const VIDEO_PATH = '/video/output1.mp4'; 
+const VIDEO_PATH = '/video/output-big.mp4';
+const PHYSICAL_FPS = 30; // from ffmpeg: 30 fps for output-big.mp4
 
 export default function FaceTracker({
   FPS = 60,
@@ -41,16 +47,37 @@ export default function FaceTracker({
       if (!videoEl) return;
 
       const dur = videoEl.duration || 0;
-      const maxFrameIdx =
-        dur > 0 ? Math.max(0, Math.floor(dur * FPS) - 1) : requestedFrameIdx;
-      const frameIdx = Math.max(0, Math.min(maxFrameIdx, requestedFrameIdx));
+      if (!Number.isFinite(dur) || dur <= 0) return;
 
-      // Seek to the middle of the frame to avoid landing on a boundary.
-      const target = (frameIdx + 0.5) / FPS;
-      const safeMax = dur > 0 ? Math.max(0, dur - 1 / FPS) : target;
+      // Logical slots are defined by the grid size (e.g. 11x11 = 121 poses).
+      const totalSlots = X_STEPS * Y_STEPS;
+      const clampedLogicalIdx = Math.max(
+        0,
+        Math.min(totalSlots - 1, requestedFrameIdx),
+      );
+
+      // Approximate total physical frames using the known video FPS.
+      const approxPhysicalFrames = Math.max(
+        1,
+        Math.floor(dur * PHYSICAL_FPS),
+      );
+
+      // Map logical index in [0, totalSlots-1] to a physical frame index
+      // spanning the full video duration.
+      const physicalIdx =
+        totalSlots > 1
+          ? Math.round(
+              (clampedLogicalIdx * (approxPhysicalFrames - 1)) /
+                (totalSlots - 1),
+            )
+          : 0;
+
+      // Seek to the middle of the chosen physical frame to avoid boundaries.
+      const target = (physicalIdx + 0.5) / PHYSICAL_FPS;
+      const safeMax = Math.max(0, dur - 1 / PHYSICAL_FPS);
       videoEl.currentTime = Math.min(Math.max(0, target), safeMax);
     },
-    [FPS],
+    [X_STEPS, Y_STEPS],
   );
 
   // Try to detect video availability on mount
