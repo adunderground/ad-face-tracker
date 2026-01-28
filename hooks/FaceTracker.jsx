@@ -7,13 +7,16 @@ import './FaceTracker.css'; // Optional styling
  * Prefers using a video at `/video/face.mp4`, falls back to images in `basePath`.
  * Maps mouse position to 2D grid of video frames.
  */
+
+const VIDEO_PATH = '/video/output1.mp4'; 
+
 export default function FaceTracker({
+  FPS = 60,
   className = '',
   basePath = '/faces/',
   showDebug = true,
   X_STEPS = 11,
   Y_STEPS = 11,
-  FPS = 60,
 }) {
   const containerRef = useRef(null);
   const videoRef = useRef(null);
@@ -22,7 +25,7 @@ export default function FaceTracker({
     basePath,
   );
 
-  const [mode, setMode] = useState('unknown'); // 'video' | 'images' | 'unknown'
+  const [mode, setMode] = useState('video'); 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   // Initial state: start centered-ish at (4,4)
@@ -55,7 +58,7 @@ export default function FaceTracker({
     let cancelled = false;
     const test = document.createElement('video');
     test.preload = 'metadata';
-    test.src = '/video/face-dots.mp4';
+    test.src = VIDEO_PATH
 
     const onLoaded = () => {
       if (cancelled) return;
@@ -188,7 +191,7 @@ export default function FaceTracker({
         {mode === 'video' && (
           <video
             ref={videoRef}
-            src="/video/face.mp4"
+            src={VIDEO_PATH}
             className="face-video"
             muted
             playsInline
