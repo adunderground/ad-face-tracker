@@ -10,14 +10,13 @@ import './FaceTracker.css'; // Optional styling
  *
  * NOTE: The mapping below is currently calibrated for `output-big.mp4`
  * (378x378, ~12.10s at 30fps). If you change the source video, you may also
- * want to update the PHYSICAL_FPS constant to match the new asset.
+ * want to update the FPS default to match the new asset.
  */
 
 const VIDEO_PATH = '/video/output-big.mp4';
-const PHYSICAL_FPS = 30; // from ffmpeg: 30 fps for output-big.mp4
 
 export default function FaceTracker({
-  FPS = 60,
+  FPS = 30,
   className = '',
   basePath = '/faces/',
   showDebug = true,
@@ -59,7 +58,7 @@ export default function FaceTracker({
       // Approximate total physical frames using the known video FPS.
       const approxPhysicalFrames = Math.max(
         1,
-        Math.floor(dur * PHYSICAL_FPS),
+        Math.floor(dur * FPS),
       );
 
       // Map logical index in [0, totalSlots-1] to a physical frame index
@@ -73,11 +72,11 @@ export default function FaceTracker({
           : 0;
 
       // Seek to the middle of the chosen physical frame to avoid boundaries.
-      const target = (physicalIdx + 0.5) / PHYSICAL_FPS;
-      const safeMax = Math.max(0, dur - 1 / PHYSICAL_FPS);
+      const target = (physicalIdx + 0.5) / FPS;
+      const safeMax = Math.max(0, dur - 1 / FPS);
       videoEl.currentTime = Math.min(Math.max(0, target), safeMax);
     },
-    [X_STEPS, Y_STEPS],
+    [X_STEPS, Y_STEPS, FPS],
   );
 
   // Try to detect video availability on mount
