@@ -30,7 +30,7 @@ export default function FaceTracker({
     basePath,
   );
 
-  const [mode, setMode] = useState('video'); 
+  const [mode, setMode] = useState('video');
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   // Initial state: start centered-ish at (4,4)
@@ -56,10 +56,7 @@ export default function FaceTracker({
       );
 
       // Approximate total physical frames using the known video FPS.
-      const approxPhysicalFrames = Math.max(
-        1,
-        Math.floor(dur * FPS),
-      );
+      const approxPhysicalFrames = Math.max(1, Math.floor(dur * FPS));
 
       // Map logical index in [0, totalSlots-1] to a physical frame index
       // spanning the full video duration.
@@ -84,7 +81,7 @@ export default function FaceTracker({
     let cancelled = false;
     const test = document.createElement('video');
     test.preload = 'metadata';
-    test.src = VIDEO_PATH
+    test.src = VIDEO_PATH;
 
     const onLoaded = () => {
       if (cancelled) return;
@@ -241,6 +238,7 @@ export default function FaceTracker({
         )}
 
         {isLoading && <div className="face-loading">Loading face...</div>}
+        <div className="overlay"></div>
       </div>
 
       <div className="face-source" aria-live="polite" style={{ marginTop: 8 }}>

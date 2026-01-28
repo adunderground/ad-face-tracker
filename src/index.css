@@ -17,3 +17,9 @@ body {
   height: 100%;
 }
 
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: #ffb0dc;
+  mix-blend-mode: multiply;
+}
