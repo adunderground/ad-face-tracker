@@ -25,6 +25,7 @@ export default function FaceTracker({
   const [mode, setMode] = useState('unknown'); // 'video' | 'images' | 'unknown'
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [frameIndex, setFrameIndex] = useState(0);
+  const [gridIndex, setGridIndex] = useState({ x: 0, y: 0 });
 
   // Try to detect video availability on mount
   useEffect(() => {
@@ -70,32 +71,64 @@ export default function FaceTracker({
         videoRef.current &&
         videoRef.current.readyState >= 2
       ) {
-        // Calculate center and normalize to [-1, 1]
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
+        // Compute pointer position within the *displayed* video content.
+        // The video uses `object-fit: contain`, so the container can include letterboxing.
+        // If we map against the full container, edges (especially right side) can quantize
+        // to the wrong column. Use the intrinsic video aspect ratio when available.
+        const videoEl = videoRef.current;
+        const vw = videoEl.videoWidth || 0;
+        const vh = videoEl.videoHeight || 0;
 
-        const nx = (e.clientX - centerX) / (rect.width / 2);
-        const ny = (e.clientY - centerY) / (rect.height / 2);
+        // Fallback: use container rect if we don't know intrinsic dimensions yet.
+        let contentLeft = rect.left;
+        let contentTop = rect.top;
+        let contentW = rect.width;
+        let contentH = rect.height;
 
-        // Clamp to [-1, 1]
-        const clampedX = Math.max(-1, Math.min(1, nx));
-        const clampedY = Math.max(-1, Math.min(1, -ny)); // Flip Y for natural feel
+        if (vw > 0 && vh > 0) {
+          const scale = Math.min(rect.width / vw, rect.height / vh);
+          contentW = vw * scale;
+          contentH = vh * scale;
+          contentLeft = rect.left + (rect.width - contentW) / 2;
+          contentTop = rect.top + (rect.height - contentH) / 2;
+        }
 
-        // Map to grid indices (negate to match video frame order)
-        const xIndex = Math.round(((-clampedX + 1) / 2) * (X_STEPS - 1));
-        const yIndex = Math.round(((-clampedY + 1) / 2) * (Y_STEPS - 1));
+        const rawXR = (e.clientX - contentLeft) / contentW;
+        const rawYR = (e.clientY - contentTop) / contentH;
+
+        // Clamp to [0, 1] within displayed content
+        const xRatio = Math.max(0, Math.min(1, rawXR));
+        const yRatio = Math.max(0, Math.min(1, rawYR));
+
+        // Map to grid indices (right side => xIndex 0, left side => xIndex 10)
+        const clampIndex = (idx, max) => Math.max(0, Math.min(max, idx));
+        const xIndex = clampIndex(
+          Math.floor((1 - xRatio) * X_STEPS),
+          X_STEPS - 1,
+        );
+        const yIndex = clampIndex(
+          Math.floor(yRatio * Y_STEPS),
+          Y_STEPS - 1,
+        );
+        setGridIndex({ x: xIndex, y: yIndex });
 
         // Calculate frame index (row-major: y * width + x)
         const fIdx = yIndex * X_STEPS + xIndex;
         setFrameIndex(fIdx);
 
-        // Convert to time
-        const frameTime = fIdx / FPS;
-        const dur = videoRef.current.duration || 0;
+        // Convert to time.
+        // Seek to the *middle* of the target frame to avoid landing exactly on a frame
+        // boundary (many browsers will display the previous frame when seeking to an
+        // exact boundary).
+        const frameTime = (fIdx + 0.5) / FPS;
+        const dur = videoEl.duration || 0;
 
-        // console.log('Setting video time to frame:', fIdx, 'time:', frameTime);
-        if (!Number.isNaN(frameTime) && frameTime <= dur) {
-          videoRef.current.currentTime = frameTime.toFixed(3);
+        // Always seek; clamp to duration to avoid "stuck on previous frame" at edges.
+        if (!Number.isNaN(frameTime)) {
+          const safeMax =
+            dur > 0 ? Math.max(0, dur - 1 / FPS) : frameTime;
+          const safeTime = Math.min(Math.max(0, frameTime), safeMax);
+          videoEl.currentTime = safeTime;
         }
       }
     },
@@ -171,8 +204,9 @@ export default function FaceTracker({
             Grid: {X_STEPS}×{Y_STEPS} | Frame: {frameIndex} | FPS: {FPS}
           </div>
           <div>
-            Time: {videoRef.current?.currentTime.toFixed(3)}
+            Index: ({gridIndex.x}, {gridIndex.y})
           </div>
+          <div>Time: {videoRef.current?.currentTime.toFixed(3)}</div>
           {mode === 'images' && (
             <div>Image: {currentImage?.split('/').pop()}</div>
           )}
