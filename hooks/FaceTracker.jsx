@@ -4,7 +4,6 @@ import './FaceTracker.css'; // Optional styling
 
 /**
  * FaceTracker Component
- * Prefers using a video at `/video/output-big.mp4`, falls back to images in `basePath`.
  * Maps mouse position to 2D grid of logical poses, which are then mapped onto
  * the physical frames of the backing video.
  *
@@ -13,13 +12,14 @@ import './FaceTracker.css'; // Optional styling
  * want to update the FPS default to match the new asset.
  */
 
-const VIDEO_PATH = '/video/output-big.mp4';
+// const VIDEO_PATH = '/video/moredots.mp4';
+const VIDEO_PATH = '/video/graph.mp4';
 
 export default function FaceTracker({
   FPS = 30,
   className = '',
   basePath = '/faces/',
-  showDebug = true,
+  showDebug = false,
   X_STEPS = 11,
   Y_STEPS = 11,
 }) {
