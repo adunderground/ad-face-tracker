@@ -24,15 +24,38 @@ export default function FaceTracker({
 
   const [mode, setMode] = useState('unknown'); // 'video' | 'images' | 'unknown'
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [frameIndex, setFrameIndex] = useState(0);
-  const [gridIndex, setGridIndex] = useState({ x: 0, y: 0 });
+
+  // Initial state: start centered-ish at (4,4)
+  const INITIAL_INDEX = { x: 4, y: 4 };
+  const [frameIndex, setFrameIndex] = useState(
+    INITIAL_INDEX.y * X_STEPS + INITIAL_INDEX.x,
+  );
+  const [gridIndex, setGridIndex] = useState(INITIAL_INDEX);
+
+  const seekToFrame = useCallback(
+    (requestedFrameIdx) => {
+      const videoEl = videoRef.current;
+      if (!videoEl) return;
+
+      const dur = videoEl.duration || 0;
+      const maxFrameIdx =
+        dur > 0 ? Math.max(0, Math.floor(dur * FPS) - 1) : requestedFrameIdx;
+      const frameIdx = Math.max(0, Math.min(maxFrameIdx, requestedFrameIdx));
+
+      // Seek to the middle of the frame to avoid landing on a boundary.
+      const target = (frameIdx + 0.5) / FPS;
+      const safeMax = dur > 0 ? Math.max(0, dur - 1 / FPS) : target;
+      videoEl.currentTime = Math.min(Math.max(0, target), safeMax);
+    },
+    [FPS],
+  );
 
   // Try to detect video availability on mount
   useEffect(() => {
     let cancelled = false;
     const test = document.createElement('video');
     test.preload = 'metadata';
-    test.src = '/video/face.mp4';
+    test.src = '/video/face-dots.mp4';
 
     const onLoaded = () => {
       if (cancelled) return;
@@ -55,6 +78,28 @@ export default function FaceTracker({
       test.removeEventListener('error', onError);
     };
   }, []);
+
+  // Ensure video shows the initial frame on load.
+  useEffect(() => {
+    if (mode !== 'video') return;
+    const videoEl = videoRef.current;
+    if (!videoEl) return;
+
+    const seekToInitial = () => {
+      const fIdx = INITIAL_INDEX.y * X_STEPS + INITIAL_INDEX.x;
+      setGridIndex(INITIAL_INDEX);
+      setFrameIndex(fIdx);
+      seekToFrame(fIdx);
+    };
+
+    if (videoEl.readyState >= 2) {
+      seekToInitial();
+      return;
+    }
+
+    videoEl.addEventListener('loadeddata', seekToInitial, { once: true });
+    return () => videoEl.removeEventListener('loadeddata', seekToInitial);
+  }, [mode, X_STEPS, seekToFrame]);
 
   // Pointer move handler: update state and drive video time when using video
   const handlePointerMove = useCallback(
@@ -106,33 +151,17 @@ export default function FaceTracker({
           Math.floor((1 - xRatio) * X_STEPS),
           X_STEPS - 1,
         );
-        const yIndex = clampIndex(
-          Math.floor(yRatio * Y_STEPS),
-          Y_STEPS - 1,
-        );
+        const yIndex = clampIndex(Math.floor(yRatio * Y_STEPS), Y_STEPS - 1);
         setGridIndex({ x: xIndex, y: yIndex });
 
         // Calculate frame index (row-major: y * width + x)
         const fIdx = yIndex * X_STEPS + xIndex;
         setFrameIndex(fIdx);
 
-        // Convert to time.
-        // Seek to the *middle* of the target frame to avoid landing exactly on a frame
-        // boundary (many browsers will display the previous frame when seeking to an
-        // exact boundary).
-        const frameTime = (fIdx + 0.5) / FPS;
-        const dur = videoEl.duration || 0;
-
-        // Always seek; clamp to duration to avoid "stuck on previous frame" at edges.
-        if (!Number.isNaN(frameTime)) {
-          const safeMax =
-            dur > 0 ? Math.max(0, dur - 1 / FPS) : frameTime;
-          const safeTime = Math.min(Math.max(0, frameTime), safeMax);
-          videoEl.currentTime = safeTime;
-        }
+        seekToFrame(fIdx);
       }
     },
-    [mode, X_STEPS, Y_STEPS, FPS],
+    [mode, X_STEPS, Y_STEPS, seekToFrame],
   );
 
   useEffect(() => {
