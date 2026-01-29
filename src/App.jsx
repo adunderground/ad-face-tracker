@@ -6,10 +6,14 @@ function App() {
   return (
     <div className="app">
       <div className="face-tracker-container">
-        <GazeTracker className="face-1" />
-        <GazeTracker className="face-2" />
-        <GazeTracker className="face-3" />
-        <GazeTracker className="face-4" />
+        <div>
+          <GazeTracker className="face-1" />
+          <GazeTracker className="face-2" />
+        </div>
+        <div>
+          <GazeTracker className="face-3" />
+          <GazeTracker className="face-4" />
+        </div>
       </div>
     </div>
   );

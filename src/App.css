@@ -13,10 +13,9 @@
   /* border: 2px solid black; */
   display: flex;
   flex-flow: row wrap;
-  gap: 20px;
   align-items: center;
   justify-content: center;
-  flex-basis: 70%;
+  flex-basis: 100%;
 }
 
 .overlay {
