@@ -6,21 +6,42 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #222;
 }
 
 .face-tracker-container {
   /* border: 2px solid black; */
-  flex-basis: 98%;
   display: flex;
   flex-flow: row wrap;
   gap: 20px;
   align-items: center;
   justify-content: center;
+  flex-basis: 70%;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  /* background: #ffb0dc; */
   mix-blend-mode: multiply;
+}
+
+.face-1 {
+  .overlay {
+    background: #ffb0dc;
+  }
+}
+.face-2 {
+  .overlay {
+    background: #e7ffb0;
+  }
+}
+.face-3 {
+  .overlay {
+    background: #b0e7ffd8;
+  }
+}
+.face-4 {
+  .overlay {
+    background: #b0ffb0;
+  }
 }
