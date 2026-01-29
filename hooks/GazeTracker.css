@@ -1,11 +1,21 @@
 .face-tracker {
   position: relative;
-  width: 100%;
-  height: 330px;
-  min-height: 300px;
-  background: #f0f0f0;
+  /* width: 100%; */
+  /* height: 330px; */
+  /* min-height: 300px; */
   overflow: hidden;
-  cursor: none; /* Hide cursor for better effect */
+  /* cursor: none;  */
+}
+
+.face-video {
+  /* width: 100%; */
+  /* height: 100%; */
+  /* object-fit: contain; */
+}
+
+.face-container {
+  height: 660px;
+  width: 650px;
 }
 
 .face-image {
@@ -55,4 +65,3 @@
     min-height: 250px;
   }
 }
-

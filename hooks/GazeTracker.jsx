@@ -208,8 +208,7 @@ export default function GazeTracker({
     <div className={`face-tracker ${className}`}>
       <div
         ref={containerRef}
-        className="face-tracker-container"
-        style={{ width: '100%', height: '100%' }}
+        className="face-container"
       >
         {mode === 'video' && (
           <video
@@ -219,7 +218,6 @@ export default function GazeTracker({
             muted
             playsInline
             preload="metadata"
-            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
           />
         )}
 
@@ -228,26 +226,10 @@ export default function GazeTracker({
             src={currentImage}
             alt="Face following gaze"
             className="face-image"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'contain',
-              transition: 'opacity 0.1s ease-out',
-            }}
           />
         )}
-
-        {isLoading && <div className="face-loading">Loading face...</div>}
         <div className="overlay"></div>
-      </div>
-
-      <div className="face-source" aria-live="polite" style={{ marginTop: 8 }}>
-        Using:{' '}
-        {mode === 'video'
-          ? 'Video'
-          : mode === 'images'
-            ? 'Images'
-            : 'Detecting...'}
+        {isLoading && <div className="face-loading">Loading face...</div>}
       </div>
 
       {showDebug && (
