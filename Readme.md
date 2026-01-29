@@ -4,8 +4,8 @@ Simple React + Vite demo that shows face images and gaze/face tracking.
 
 Summary:
 
-- Uses a small React component and a hook to swap/track face images (see `hooks/useGazeTracking.js`).
-- Faces are stored under `public/faces/` or 'public/video'.
+- Uses a small React component to swap/track face images (see `hooks/GazeTracker`).
+- Faces are stored under `public/faces/` or `public/video`.
 
 Quick start:
 
@@ -18,10 +18,10 @@ Based on and inspired by https://github.com/wesbos/eye-ballz and https://github.
 
 More in this amazing [Youtube video](https://youtu.be/sPdRCYbO6so?si=MFNsdErHpJOcuffC) by [Wes Bos](https://github.com/wesbos)
 
-### Basic Usage FaceTracker component
+### Basic Usage (GazeTracker component)
 
 ```jsx
-import FaceTracker from './components/FaceTracker';
+import GazeTracker from './hooks/GazeTracker';
 
 function App() {
   return (
@@ -29,10 +29,10 @@ function App() {
       <h1>My Portfolio</h1>
 
       {/* Basic usage */}
-      <FaceTracker />
+      <GazeTracker />
 
       {/* With custom styling */}
-      <FaceTracker className="my-custom-class" basePath="/faces/" />
+      <GazeTracker className="my-custom-class" basePath="/faces/" />
     </div>
   );
 }
@@ -41,7 +41,7 @@ function App() {
 ### Advanced Usage
 
 ```jsx
-import FaceTracker from './components/FaceTracker';
+import GazeTracker from './hooks/GazeTracker';
 
 function Header() {
   return (
@@ -54,7 +54,7 @@ function Header() {
       }}
     >
       <div style={{ width: '300px', height: '300px' }}>
-        <FaceTracker
+        <GazeTracker
           basePath="/faces/"
           showDebug={process.env.NODE_ENV === 'development'}
         />
@@ -64,63 +64,16 @@ function Header() {
 }
 ```
 
-### Using the Hook Directly
-
-For more control, use the `useGazeTracking` hook directly:
-
-```jsx
-import { useRef, useEffect } from 'react';
-import { useGazeTracking } from './hooks/useGazeTracking';
-
-function CustomFaceComponent() {
-  const containerRef = useRef(null);
-  const { currentImage, isLoading, error } = useGazeTracking(
-    containerRef,
-    '/faces/'
-  );
-
-  return (
-    <div
-      ref={containerRef}
-      style={{ width: '400px', height: '400px', position: 'relative' }}
-    >
-      {currentImage && (
-        <img
-          src={currentImage}
-          alt="Following face"
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            borderRadius: '50%', // Make it circular!
-          }}
-        />
-      )}
-      {isLoading && <p>Loading...</p>}
-      {error && <p>Error: {error.message}</p>}
-    </div>
-  );
-}
-```
-
 ### Configuration
 
-If you change the generation parameters, update these constants in `useGazeTracking.js`:
-
-```javascript
-// Must match your generation parameters!
-const P_MIN = -15; // Same as --min
-const P_MAX = 15; // Same as --max
-const STEP = 3; // Same as --step
-const SIZE = 256; // Same as --size
-```
+If you change generation/gaze parameters, update the corresponding constants in `hooks/GazeTracker.js` (if present) so paths and generation params remain in sync.
 
 ## 🎛️ Customization
 
 ### Changing Image Directory
 
 ```jsx
-<FaceTracker basePath="/assets/my-face/" />
+<GazeTracker basePath="/assets/my-face/" />
 ```
 
 ### Adding Custom Styling
