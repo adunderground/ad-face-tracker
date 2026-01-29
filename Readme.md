@@ -1,11 +1,11 @@
 # ad-face-tracker
 
-Simple React + Vite demo that shows face images and basic gaze/face tracking.
+Simple React + Vite demo that shows face images and gaze/face tracking.
 
 Summary:
 
 - Uses a small React component and a hook to swap/track face images (see `hooks/useGazeTracking.js`).
-- Faces are stored under `public/faces/`.
+- Faces are stored under `public/faces/` or 'public/video'.
 
 Quick start:
 
@@ -14,8 +14,9 @@ Quick start:
 
 Credits:
 
-Based on and inspired by https://github.com/kylan02/face_looker.
+Based on and inspired by https://github.com/wesbos/eye-ballz and https://github.com/kylan02/face_looker.
 
+More in this amazing [Youtube video](https://youtu.be/sPdRCYbO6so?si=MFNsdErHpJOcuffC) by [Wes Bos](https://github.com/wesbos)
 
 ### Basic Usage FaceTracker component
 
