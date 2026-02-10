@@ -13,7 +13,7 @@ import './GazeTracker.css'; // Optional styling
  */
 
 // const VIDEO_PATH = '/video/moredots.mp4';
-const VIDEO_PATH = '/video/graph.mp4';
+const VIDEO_PATH = '/video/dots.mp4';
 
 export default function GazeTracker({
   FPS = 30,
