@@ -1,3 +1,19 @@
+@font-face {
+  font-family: 'e-Ukraine';
+  src: url('/fonts/e-Ukraine.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'UAFSans';
+  src: url('/fonts/UAFSans.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,15 +21,14 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'e-Ukraine', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* font-family: 'UAFSans', sans-serif; */
 
 #root {
   width: 100%;
   height: 100%;
 }
-
