@@ -4,13 +4,14 @@
   margin: 0;
   padding: 0;
   display: flex;
+  flex-flow: row-reverse;
   align-items: center;
   justify-content: center;
+  gap: 200px;
 }
 
 .face-tracker-container {
-  /* border: 2px solid black; */
-  flex-basis: 98%;
+  border: 2px solid black;
   display: flex;
   flex-flow: row wrap;
   gap: 20px;
