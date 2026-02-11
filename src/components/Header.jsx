@@ -13,8 +13,10 @@ const Header = () => {
       <article className="bio">
         I build software that solves complex business problems, craft bold,
         high-performing websites, lead teams from idea to launch, <br />
-        win UX hackathons, and leverage cutting-edge AI with intent.  <br /> <br />
-        When I'm not surfing the web, I like to surf the ocean swells, play guitar, and spin vinyl records for my friends.
+        win UX hackathons, and leverage cutting-edge AI with intent. <br />
+        <br />
+        When I'm not surfing the web, I like to surf the ocean swells, <br />
+        play guitar, and spin vinyl records for my friends.
       </article>
       <a
         className="button"

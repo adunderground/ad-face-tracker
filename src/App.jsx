@@ -1,7 +1,7 @@
 import React from 'react';
 import GazeTracker from '../hooks/GazeTracker';
 import Header from './components/Header';
-// import Footer from './components/Footer'
+import Footer from './components/Footer';
 import './App.css';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <div className="face-tracker-container">
         <GazeTracker />
       </div>
-      {/* <Footer /> */}
+      <Footer />
     </div>
   );
 }

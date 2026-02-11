@@ -2,12 +2,13 @@
   width: 100vw;
   height: 100vh;
   margin: 0;
-  padding: 0;
+  padding: 0 0 80px 0;
   display: flex;
   flex-flow: row-reverse;
   align-items: center;
   justify-content: center;
   gap: 180px;
+  box-sizing: border-box;
 }
 
 .face-tracker-container {
