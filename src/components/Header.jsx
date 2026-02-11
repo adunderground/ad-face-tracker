@@ -4,23 +4,26 @@ import './Header.css';
 const Header = () => {
   return (
     <div className="header-container">
-      <div className="bio">
+      <article className="bio">
         <h1>
           Hello, I'm <span className="name">Arkady Dolina</span>
         </h1>
         Senior Software Engineer based in Washington D.C.
-      </div>
-      <div className="bio">
-        I provide software solutions to complex business problems, <br />
-        create eye-catching functional sites, lead teams to the finish line, win
-        UX Hackathons, and confidently surf both the web and <br />
-        (much less confidently) the waves.
-      </div>
-      <div className="button">
-        <a href="/assets/ArkadyDolinaResume.pdf" noref noopener target="_blank">
-          View My Resume
-        </a>
-      </div>
+      </article>
+      <article className="bio">
+        I build software that solves complex business problems, craft bold,
+        high-performing websites, lead teams from idea to launch, <br />
+        win UX hackathons, and leverage cutting-edge AI with intent.  <br /> <br />
+        When I'm not surfing the web, I like to surf the ocean swells, play guitar, and spin vinyl records for my friends.
+      </article>
+      <a
+        className="button"
+        href="/assets/ArkadyDolinaResume.pdf"
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        View My Resume
+      </a>
     </div>
   );
 };
