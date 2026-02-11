@@ -20,6 +20,27 @@
   justify-content: center;
 }
 
+@media (max-width: 1024px) {
+  .app {
+    gap: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    padding: 20px 20px 80px 20px;
+    gap: 40px;
+    justify-content: flex-start;
+  }
+
+  .face-tracker-container {
+    order: -1;
+  }
+}
+
 .overlay {
   position: absolute;
   inset: 0;
