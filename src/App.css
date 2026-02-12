@@ -47,3 +47,8 @@
   /* background: #ffb0dc; */
   mix-blend-mode: multiply;
 }
+
+::selection{
+  color: white;
+  background-color: black;
+}
