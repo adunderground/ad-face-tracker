@@ -11,9 +11,10 @@ const Header = () => {
         Senior Software Engineer based in Washington D.C.
       </article>
       <article className="bio">
-        I build software that solves complex business problems, craft bold,
-        high-performing websites, lead teams from idea to launch, <br />
-        win UX hackathons, and leverage cutting-edge AI with intent. <br />
+        I build software that solves complex business problems, <br />
+        create eye-catching, high-performing websites,
+        <br /> lead teams from idea to launch, win UX hackathons,
+        <br /> and leverage cutting-edge AI with intent. <br />
         <br />
         When I'm not surfing the web, I like to surf the ocean swells, <br />
         play guitar, and spin vinyl records for my friends.
